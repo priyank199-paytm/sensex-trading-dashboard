@@ -106,4 +106,15 @@ function analyse(){
 }
 function confirmTrade(){document.getElementById("status").innerText="SIMULATION ONLY — no Paytm Money order was sent."}
 function exitTrade(){document.getElementById("signal").innerText="WAIT";document.getElementById("signal").className="signal wait";document.getElementById("buy").disabled=true;document.getElementById("status").innerText="Trade setup cancelled."}
+</script><script>
+fetch("http://127.0.0.1:5000/")
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById("status").innerText =
+      "Paytm backend connected: " + data.status;
+  })
+  .catch(() => {
+    document.getElementById("status").innerText =
+      "Backend connection failed";
+  });
 </script></body></html>
