@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SENSEX Options Trading Dashboard</title>
+<style>
+:root{--bg:#08111f;--card:#101c2d;--line:#26364b;--text:#eef5ff;--muted:#91a4bb;--green:#36d399;--red:#fb7185;--amber:#fbbf24;--blue:#60a5fa}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#07101d,#0b1627);color:var(--text);font-family:Arial,sans-serif}
+.wrap{max-width:1200px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{margin:0;font-size:25px}.sub{color:var(--muted);margin-top:6px}.badge{padding:8px 12px;border:1px solid var(--line);border-radius:20px;color:var(--amber)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}.card{background:rgba(16,28,45,.96);border:1px solid var(--line);border-radius:15px;padding:16px}
+.label{font-size:12px;color:var(--muted);text-transform:uppercase}.big{font-size:27px;font-weight:700;margin-top:8px}.green{color:var(--green)}.red{color:var(--red)}.amber{color:var(--amber)}
+.main{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-top:14px}h2{font-size:17px;margin:0 0 14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+input,select{width:100%;background:#091423;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px}
+.signal{font-size:42px;font-weight:800;text-align:center;padding:18px}.wait{color:var(--amber)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.metric{background:#091423;border-radius:10px;padding:12px}.metric b{display:block;margin-top:5px}
+button{border:0;border-radius:10px;padding:12px 16px;font-weight:700;cursor:pointer}.analyse{background:var(--blue);color:#06101c;width:100%;margin-top:8px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.buy{background:var(--green)}.exit{background:var(--red)}button:disabled{opacity:.35;cursor:not-allowed}
+.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:12px}.footer{text-align:center;color:var(--muted);font-size:11px;margin-top:20px}
+@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.main{grid-template-columns:1fr}}@media(max-width:480px){.grid,.row,.metrics{grid-template-columns:1fr}}
+</style>
+</head>
+<body><div class="wrap">
+<div class="top"><div><h1>SENSEX Options Dashboard</h1><div class="sub">Probability-focused signal & risk dashboard • designed to avoid low-quality trades</div></div><div class="badge">MANUAL CONFIRMATION MODE</div></div>
+
+<div class="grid">
+<div class="card"><div class="label">Trading Capital</div><div class="big">₹2,00,000</div></div>
+<div class="card"><div class="label">Max Loss / Trade</div><div class="big red">₹4,000</div></div>
+<div class="card"><div class="label">Daily Loss Limit</div><div class="big red">₹8,000</div></div>
+<div class="card"><div class="label">Max Trades / Day</div><div class="big">100</div></div>
+</div>
+
+<div class="main">
+<div class="card">
+<h2>Market Input</h2>
+<div class="row"><div><label>SENSEX Spot</label><input id="spot" type="number" placeholder="Enter current SENSEX"></div><div><label>Selected Option Premium (₹)</label><input id="premium" type="number" placeholder="e.g. 250"></div></div>
+<div class="row"><div><label>Breakout Level</label><input id="upper" type="number" value="78750"></div><div><label>Breakdown Level</label><input id="lower" type="number" value="78250"></div></div>
+<div class="row"><div><label>Stop Loss % on Premium</label><input id="slpct" type="number" value="20"></div><div><label>Lot Size</label><input id="lot" type="number" value="20"></div></div>
+<div class="row"><div><label>Breakout Confirmation Buffer (pts)</label><input id="buffer" type="number" value="50"></div><div><label>Risk : Reward</label><select id="rr"><option value="1.5">1 : 1.5</option><option value="2" selected>1 : 2</option><option value="2.5">1 : 2.5</option><option value="3">1 : 3</option></select></div></div>
+<div class="row"><div><label>Daily P&L (₹)</label><input id="dailypl" type="number" value="0"></div><div><label>Trades Taken Today</label><input id="trades" type="number" value="0"></div></div>
+<div class="row"><div><label>Consecutive Losses</label><input id="losses" type="number" value="0"></div><div><label>Minimum Trade Quality</label><select id="minquality"><option value="A" selected>A only</option><option value="B">A or B</option></select></div></div>
+<button class="analyse" onclick="analyse()">ANALYSE TRADE</button>
+<div class="note">This version prioritizes trade quality over trade frequency: confirmation buffer, configurable risk/reward, daily-loss lock and trade-count lock are built in. It does not fetch live prices or place broker orders yet. Verify current contract specifications and lot size before trading.</div>
+</div>
+
+<div class="card">
+<h2>Trade Decision</h2>
+<div id="signal" class="signal wait">WAIT</div>
+<div class="metrics">
+<div class="metric"><span class="label">Strike</span><b id="strike">—</b></div>
+<div class="metric"><span class="label">SL</span><b id="sl">—</b></div>
+<div class="metric"><span class="label">Target</span><b id="target">—</b></div>
+<div class="metric"><span class="label">Lots</span><b id="lots">—</b></div>
+<div class="metric"><span class="label">Capital Used</span><b id="used">—</b></div>
+<div class="metric"><span class="label">Risk</span><b id="risk">—</b></div><div class="metric"><span class="label">R:R</span><b id="rrout">—</b></div><div class="metric"><span class="label">Trade Quality</span><b id="quality">—</b></div>
+</div>
+<div class="actions"><button id="buy" class="buy" disabled onclick="confirmTrade()">CONFIRM BUY</button><button class="exit" onclick="exitTrade()">EXIT / CANCEL</button></div>
+<div id="status" class="note">No order is connected. Confirmation is simulation-only.</div>
+</div>
+</div>
+<div class="card" style="margin-top:14px"><h2>Protection Rules</h2>
+<div class="note">• Up to 100 qualifying trades/day — not a trade quota.<br>
+• Hard daily loss lock: ₹8,000.<br>
+• Cooldown after 3 consecutive losses.<br>
+• Default maximum risk/trade: ₹4,000 and maximum capital deployed: ₹60,000.<br>
+• A-quality filter can reject marginal breakouts.<br>
+• Profit targets use configurable risk:reward instead of a forced monthly target.</div></div>
+<div class="footer">No strategy can guarantee profit. Options can lose the entire premium rapidly. This dashboard remains simulation-only until a broker API is securely connected.</div>
+</div>
+<script>
+function money(n){return "₹"+Math.round(n).toLocaleString("en-IN")}
+function analyse(){
+ const spot=+document.getElementById("spot").value, p=+document.getElementById("premium").value;
+ const up=+document.getElementById("upper").value, low=+document.getElementById("lower").value;
+ const slpct=+document.getElementById("slpct").value/100, lot=+document.getElementById("lot").value;
+ const buffer=+document.getElementById("buffer").value, rr=+document.getElementById("rr").value;
+ const dailypl=+document.getElementById("dailypl").value, trades=+document.getElementById("trades").value;
+ const sig=document.getElementById("signal"), buy=document.getElementById("buy");
+ if(!spot||!p||!lot){document.getElementById("status").innerText="Enter SENSEX spot, option premium and lot size.";return}
+ if(dailypl<=-8000){sig.innerText="STOP";sig.className="signal red";buy.disabled=true;document.getElementById("status").innerText="DAILY LOSS LIMIT HIT — trading locked.";return}
+ if(trades>=100){sig.innerText="STOP";sig.className="signal red";buy.disabled=true;document.getElementById("status").innerText="MAXIMUM 100 TRADES REACHED — trading locked for today.";return}
+ const losses=+document.getElementById("losses").value;
+ if(losses>=3){sig.innerText="COOLDOWN";sig.className="signal amber";buy.disabled=true;document.getElementById("status").innerText="3 CONSECUTIVE LOSSES — pause and reassess before another trade.";return}
+ let side="WAIT";
+ if(spot>up+buffer) side="CALL"; else if(spot<low-buffer) side="PUT";
+ sig.innerText=side; sig.className="signal "+(side==="CALL"?"green":side==="PUT"?"red":"wait");
+ const strike=Math.round(spot/100)*100;
+ const sl=p*(1-slpct), target=p*(1+rr*slpct), riskPerLot=(p-sl)*lot;
+ const maxLots=Math.max(0,Math.floor(Math.min(4000/riskPerLot,60000/(p*lot))));
+ document.getElementById("strike").innerText=side==="WAIT"?"—":strike+" "+(side==="CALL"?"CE":"PE");
+ document.getElementById("sl").innerText=side==="WAIT"?"—":money(sl);
+ document.getElementById("target").innerText=side==="WAIT"?"—":money(target);
+ document.getElementById("lots").innerText=side==="WAIT"?"—":maxLots;
+ document.getElementById("used").innerText=side==="WAIT"?"—":money(maxLots*p*lot);
+ document.getElementById("risk").innerText=side==="WAIT"?"—":money(maxLots*riskPerLot);
+ document.getElementById("rrout").innerText=side==="WAIT"?"—":"1 : "+rr;
+ const distance=side==="CALL"?(spot-up):(low-spot);
+ const quality=side==="WAIT"?"NO TRADE":distance>=buffer*2?"A":"B";
+ document.getElementById("quality").innerText=quality;
+ const minq=document.getElementById("minquality").value;
+ const qualityPass=(quality==="A")||(minq==="B"&&quality==="B");
+ buy.disabled=side==="WAIT"||maxLots<1||!qualityPass;
+ document.getElementById("status").innerText=side==="WAIT"?"No breakout/breakdown signal. Wait.":(!qualityPass?"Signal rejected by trade-quality filter.":"Qualified simulation prepared. Broker order execution is NOT connected.");
+}
+function confirmTrade(){document.getElementById("status").innerText="SIMULATION ONLY — no Paytm Money order was sent."}
+function exitTrade(){document.getElementById("signal").innerText="WAIT";document.getElementById("signal").className="signal wait";document.getElementById("buy").disabled=true;document.getElementById("status").innerText="Trade setup cancelled."}
+</script></body></html>
