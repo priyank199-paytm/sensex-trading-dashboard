@@ -117,4 +117,19 @@ fetch("http://127.0.0.1:5000/")
     document.getElementById("status").innerText =
       "Backend connection failed";
   });
+</script><div id="backend-status" style="padding:10px;font-weight:bold">
+Checking backend...
+</div>
+
+<script>
+fetch("http://127.0.0.1:5000/")
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById("backend-status").textContent =
+      "Backend: " + data.status;
+  })
+  .catch(() => {
+    document.getElementById("backend-status").textContent =
+      "Backend: NOT CONNECTED";
+  });
 </script></body></html>
