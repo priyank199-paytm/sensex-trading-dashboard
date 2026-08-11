@@ -105,7 +105,7 @@ function analyse(){
  document.getElementById("status").innerText=side==="WAIT"?"No breakout/breakdown signal. Wait.":(!qualityPass?"Signal rejected by trade-quality filter.":"Qualified simulation prepared. Broker order execution is NOT connected.");
 }
 function confirmTrade(){document.getElementById("status").innerText="SIMULATION ONLY — no Paytm Money order was sent."}
-function exitTrade(){document.getElementById("signal").innerText="WAIT";document.getElementById("signal").className="signal wait";document.getElementById("buy").disabled=true;document.getElementById("status").innerText="Trade setup cancelled."}
+function exitTrade(){document.getElementById("signal").innerText="WAIT";document.getElementById("signal").className="signal wait";document.getElementById("buy").disabled=true;document.getElementById("status").innerText="Trade setup cancelled."}</script>
 <div id="backend-status" style="padding:10px;font-weight:bold">
 Connecting to Paytm live market data...
 </div>
