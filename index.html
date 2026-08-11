@@ -106,30 +106,40 @@ function analyse(){
 }
 function confirmTrade(){document.getElementById("status").innerText="SIMULATION ONLY — no Paytm Money order was sent."}
 function exitTrade(){document.getElementById("signal").innerText="WAIT";document.getElementById("signal").className="signal wait";document.getElementById("buy").disabled=true;document.getElementById("status").innerText="Trade setup cancelled."}
-</script><script>
-fetch("http://127.0.0.1:5000/")
-  .then(r => r.json())
-  .then(data => {
-    document.getElementById("status").innerText =
-      "Paytm backend connected: " + data.status;
-  })
-  .catch(() => {
-    document.getElementById("status").innerText =
-      "Backend connection failed";
-  });
-</script><div id="backend-status" style="padding:10px;font-weight:bold">
-Checking backend...
+<div id="backend-status" style="padding:10px;font-weight:bold">
+Connecting to Paytm live market data...
 </div>
 
 <script>
-fetch("http://127.0.0.1:5000/")
-  .then(r => r.json())
-  .then(data => {
-    document.getElementById("backend-status").textContent =
-      "Backend: " + data.status;
-  })
-  .catch(() => {
-    document.getElementById("backend-status").textContent =
-      "Backend: NOT CONNECTED";
-  });
+const BACKEND_URL = "https://morgan-portsmouth-learn-started.trycloudflare.com";
+
+async function updateSensex() {
+    try {
+        const response = await fetch(BACKEND_URL + "/sensex");
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error("Backend returned an error");
+        }
+
+        document.getElementById("spot").value = data.sensex;
+
+        document.getElementById("backend-status").textContent =
+            "LIVE SENSEX: " +
+            Number(data.sensex).toLocaleString("en-IN") +
+            " | Change: " +
+            Number(data.change).toFixed(2) +
+            " (" +
+            Number(data.change_percent).toFixed(2) +
+            "%)";
+
+    } catch (error) {
+        document.getElementById("backend-status").textContent =
+            "Paytm live data: NOT CONNECTED";
+    }
+}
+
+updateSensex();
+
+setInterval(updateSensex, 5000);
 </script></body></html>
