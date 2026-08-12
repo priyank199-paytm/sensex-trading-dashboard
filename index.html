@@ -4,163 +4,1162 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SENSEX Options Trading Dashboard</title>
+
 <style>
-:root{--bg:#08111f;--card:#101c2d;--line:#26364b;--text:#eef5ff;--muted:#91a4bb;--green:#36d399;--red:#fb7185;--amber:#fbbf24;--blue:#60a5fa}
-*{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#07101d,#0b1627);color:var(--text);font-family:Arial,sans-serif}
-.wrap{max-width:1200px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-h1{margin:0;font-size:25px}.sub{color:var(--muted);margin-top:6px}.badge{padding:8px 12px;border:1px solid var(--line);border-radius:20px;color:var(--amber)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}.card{background:rgba(16,28,45,.96);border:1px solid var(--line);border-radius:15px;padding:16px}
-.label{font-size:12px;color:var(--muted);text-transform:uppercase}.big{font-size:27px;font-weight:700;margin-top:8px}.green{color:var(--green)}.red{color:var(--red)}.amber{color:var(--amber)}
-.main{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-top:14px}h2{font-size:17px;margin:0 0 14px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
-input,select{width:100%;background:#091423;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px}
-.signal{font-size:42px;font-weight:800;text-align:center;padding:18px}.wait{color:var(--amber)}
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.metric{background:#091423;border-radius:10px;padding:12px}.metric b{display:block;margin-top:5px}
-button{border:0;border-radius:10px;padding:12px 16px;font-weight:700;cursor:pointer}.analyse{background:var(--blue);color:#06101c;width:100%;margin-top:8px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.buy{background:var(--green)}.exit{background:var(--red)}button:disabled{opacity:.35;cursor:not-allowed}
-.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:12px}.footer{text-align:center;color:var(--muted);font-size:11px;margin-top:20px}
-@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.main{grid-template-columns:1fr}}@media(max-width:480px){.grid,.row,.metrics{grid-template-columns:1fr}}
+:root{
+  --bg:#08111f;
+  --card:#101c2d;
+  --line:#26364b;
+  --text:#eef5ff;
+  --muted:#91a4bb;
+  --green:#36d399;
+  --red:#fb7185;
+  --amber:#fbbf24;
+  --blue:#60a5fa;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:linear-gradient(135deg,#07101d,#0b1627);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+
+.wrap{
+  max-width:1200px;
+  margin:auto;
+  padding:22px;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+h1{margin:0;font-size:25px}
+h2{font-size:17px;margin:0 0 14px}
+
+.sub{
+  color:var(--muted);
+  margin-top:6px;
+}
+
+.badge{
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  color:var(--amber);
+}
+
+.livebar{
+  margin-top:16px;
+  padding:13px 16px;
+  background:rgba(16,28,45,.96);
+  border:1px solid var(--line);
+  border-radius:12px;
+  font-weight:700;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-top:18px;
+}
+
+.card{
+  background:rgba(16,28,45,.96);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:16px;
+}
+
+.label{
+  font-size:12px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+.big{
+  font-size:27px;
+  font-weight:700;
+  margin-top:8px;
+}
+
+.green{color:var(--green)}
+.red{color:var(--red)}
+.amber{color:var(--amber)}
+
+.main{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:14px;
+  margin-top:14px;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+label{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+input,select{
+  width:100%;
+  background:#091423;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:11px;
+}
+
+.signal{
+  font-size:42px;
+  font-weight:800;
+  text-align:center;
+  padding:18px;
+}
+
+.wait{color:var(--amber)}
+
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+}
+
+.metric{
+  background:#091423;
+  border-radius:10px;
+  padding:12px;
+}
+
+.metric b{
+  display:block;
+  margin-top:5px;
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:12px 16px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.analyse{
+  background:var(--blue);
+  color:#06101c;
+  width:100%;
+  margin-top:8px;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+
+.buy{background:var(--green)}
+.exit{background:var(--red)}
+
+button:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+}
+
+.note{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.5;
+  margin-top:12px;
+}
+
+.footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:20px;
+}
+
+@media(max-width:800px){
+  .grid{grid-template-columns:1fr 1fr}
+  .main{grid-template-columns:1fr}
+}
+
+@media(max-width:480px){
+  .grid,.row,.metrics{grid-template-columns:1fr}
+}
 </style>
 </head>
-<body><div class="wrap">
-<div class="top"><div><h1>SENSEX Options Dashboard</h1><div class="sub">Probability-focused signal & risk dashboard • designed to avoid low-quality trades</div></div><div class="badge">MANUAL CONFIRMATION MODE</div></div>
+
+<body>
+
+<div class="wrap">
+
+<div class="top">
+  <div>
+    <h1>SENSEX Options Dashboard</h1>
+    <div class="sub">
+      Paytm Money live market data • Manual confirmation trading dashboard
+    </div>
+  </div>
+
+  <div class="badge">
+    MANUAL CONFIRMATION MODE
+  </div>
+</div>
+
+
+<div id="backend-status" class="livebar amber">
+CONNECTING TO PAYTM...
+</div>
+
 
 <div class="grid">
-<div class="card"><div class="label">Trading Capital</div><div class="big">₹2,00,000</div></div>
-<div class="card"><div class="label">Max Loss / Trade</div><div class="big red">₹4,000</div></div>
-<div class="card"><div class="label">Daily Loss Limit</div><div class="big red">₹8,000</div></div>
-<div class="card"><div class="label">Max Trades / Day</div><div class="big">100</div></div>
+
+<div class="card">
+  <div class="label">Trading Capital</div>
+  <div class="big">₹2,00,000</div>
 </div>
+
+<div class="card">
+  <div class="label">Max Loss / Trade</div>
+  <div class="big red">₹4,000</div>
+</div>
+
+<div class="card">
+  <div class="label">Daily Loss Limit</div>
+  <div class="big red">₹8,000</div>
+</div>
+
+<div class="card">
+  <div class="label">Max Trades / Day</div>
+  <div class="big">100</div>
+</div>
+
+</div>
+
 
 <div class="main">
-<div class="card">
-<h2>Market Input</h2>
-<div class="row"><div><label>SENSEX Spot</label><input id="spot" type="number" placeholder="Enter current SENSEX"></div><div><label>Selected Option Premium (₹)</label><input id="premium" type="number" placeholder="e.g. 250"></div></div>
-<div class="row"><div><label>Breakout Level</label><input id="upper" type="number" value="78750"></div><div><label>Breakdown Level</label><input id="lower" type="number" value="78250"></div></div>
-<div class="row"><div><label>Stop Loss % on Premium</label><input id="slpct" type="number" value="20"></div><div><label>Lot Size</label><input id="lot" type="number" value="20"></div></div>
-<div class="row"><div><label>Breakout Confirmation Buffer (pts)</label><input id="buffer" type="number" value="50"></div><div><label>Risk : Reward</label><select id="rr"><option value="1.5">1 : 1.5</option><option value="2" selected>1 : 2</option><option value="2.5">1 : 2.5</option><option value="3">1 : 3</option></select></div></div>
-<div class="row"><div><label>Daily P&L (₹)</label><input id="dailypl" type="number" value="0"></div><div><label>Trades Taken Today</label><input id="trades" type="number" value="0"></div></div>
-<div class="row"><div><label>Consecutive Losses</label><input id="losses" type="number" value="0"></div><div><label>Minimum Trade Quality</label><select id="minquality"><option value="A" selected>A only</option><option value="B">A or B</option></select></div></div>
-<button class="analyse" onclick="analyse()">ANALYSE TRADE</button>
-<div class="note">This version prioritizes trade quality over trade frequency: confirmation buffer, configurable risk/reward, daily-loss lock and trade-count lock are built in. It does not fetch live prices or place broker orders yet. Verify current contract specifications and lot size before trading.</div>
-</div>
 
 <div class="card">
+
+<h2>Live Market Input</h2>
+
+<div class="row">
+
+<div>
+<label>SENSEX Spot</label>
+<input id="spot" type="number" readonly>
+</div>
+
+<div>
+<label>Selected Option Premium (₹)</label>
+<input id="premium" type="number" readonly>
+</div>
+
+</div>
+
+
+<div class="row">
+
+<div>
+<label>Live ATM Strike</label>
+<input id="atm" type="number" readonly>
+</div>
+
+<div>
+<label>Nearest Expiry</label>
+<input id="expiry" type="text" readonly>
+</div>
+
+</div>
+
+
+<div class="row">
+
+<div>
+<label>ATM CE Premium (₹)</label>
+<input id="cepremium" type="number" readonly>
+</div>
+
+<div>
+<label>ATM PE Premium (₹)</label>
+<input id="pepremium" type="number" readonly>
+</div>
+
+</div>
+
+
+<div class="row">
+
+<div>
+<label>Breakout Level</label>
+<input id="upper" type="number" value="78750">
+</div>
+
+<div>
+<label>Breakdown Level</label>
+<input id="lower" type="number" value="78250">
+</div>
+
+</div>
+
+
+<div class="row">
+
+<div>
+<label>Stop Loss % on Premium</label>
+<input id="slpct" type="number" value="20">
+</div>
+
+<div>
+<label>Lot Size</label>
+<input id="lot" type="number" value="20" readonly>
+</div>
+
+</div>
+
+
+<div class="row">
+
+<div>
+<label>Breakout Confirmation Buffer (pts)</label>
+<input id="buffer" type="number" value="50">
+</div>
+
+<div>
+<label>Risk : Reward</label>
+
+<select id="rr">
+<option value="1.5">1 : 1.5</option>
+<option value="2" selected>1 : 2</option>
+<option value="2.5">1 : 2.5</option>
+<option value="3">1 : 3</option>
+</select>
+
+</div>
+
+</div>
+
+
+<div class="row">
+
+<div>
+<label>Daily P&L (₹)</label>
+<input id="dailypl" type="number" value="0">
+</div>
+
+<div>
+<label>Trades Taken Today</label>
+<input id="trades" type="number" value="0">
+</div>
+
+</div>
+
+
+<div class="row">
+
+<div>
+<label>Consecutive Losses</label>
+<input id="losses" type="number" value="0">
+</div>
+
+<div>
+<label>Minimum Trade Quality</label>
+
+<select id="minquality">
+<option value="A" selected>A only</option>
+<option value="B">A or B</option>
+</select>
+
+</div>
+
+</div>
+
+
+<button class="analyse" onclick="analyse()">
+ANALYSE TRADE
+</button>
+
+<div class="note">
+Live SENSEX, ATM strike, nearest expiry and ATM CE/PE premiums are received from the Paytm Money backend. Order execution remains disabled.
+</div>
+
+</div>
+
+
+<div class="card">
+
 <h2>Trade Decision</h2>
-<div id="signal" class="signal wait">WAIT</div>
+
+<div id="signal" class="signal wait">
+WAIT
+</div>
+
+
 <div class="metrics">
-<div class="metric"><span class="label">Strike</span><b id="strike">—</b></div>
-<div class="metric"><span class="label">SL</span><b id="sl">—</b></div>
-<div class="metric"><span class="label">Target</span><b id="target">—</b></div>
-<div class="metric"><span class="label">Lots</span><b id="lots">—</b></div>
-<div class="metric"><span class="label">Capital Used</span><b id="used">—</b></div>
-<div class="metric"><span class="label">Risk</span><b id="risk">—</b></div><div class="metric"><span class="label">R:R</span><b id="rrout">—</b></div><div class="metric"><span class="label">Trade Quality</span><b id="quality">—</b></div>
+
+<div class="metric">
+<span class="label">Strike</span>
+<b id="strike">—</b>
 </div>
-<div class="actions"><button id="buy" class="buy" disabled onclick="confirmTrade()">CONFIRM BUY</button><button class="exit" onclick="exitTrade()">EXIT / CANCEL</button></div>
-<div id="status" class="note">No order is connected. Confirmation is simulation-only.</div>
+
+<div class="metric">
+<span class="label">Premium</span>
+<b id="selectedpremium">—</b>
 </div>
+
+<div class="metric">
+<span class="label">SL</span>
+<b id="sl">—</b>
 </div>
-<div class="card" style="margin-top:14px"><h2>Protection Rules</h2>
-<div class="note">• Up to 100 qualifying trades/day — not a trade quota.<br>
-• Hard daily loss lock: ₹8,000.<br>
+
+<div class="metric">
+<span class="label">Target</span>
+<b id="target">—</b>
+</div>
+
+<div class="metric">
+<span class="label">Lots</span>
+<b id="lots">—</b>
+</div>
+
+<div class="metric">
+<span class="label">Capital Used</span>
+<b id="used">—</b>
+</div>
+
+<div class="metric">
+<span class="label">Risk</span>
+<b id="risk">—</b>
+</div>
+
+<div class="metric">
+<span class="label">R:R</span>
+<b id="rrout">—</b>
+</div>
+
+<div class="metric">
+<span class="label">Trade Quality</span>
+<b id="quality">—</b>
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<button id="buy"
+        class="buy"
+        disabled
+        onclick="confirmTrade()">
+CONFIRM BUY
+</button>
+
+<button class="exit"
+        onclick="exitTrade()">
+EXIT / CANCEL
+</button>
+
+</div>
+
+<div id="status" class="note">
+Waiting for live market data.
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card" style="margin-top:14px">
+
+<h2>Protection Rules</h2>
+
+<div class="note">
+
+• Maximum loss/trade: ₹4,000.<br>
+• Daily loss lock: ₹8,000.<br>
+• Maximum deployed capital: ₹60,000.<br>
 • Cooldown after 3 consecutive losses.<br>
-• Default maximum risk/trade: ₹4,000 and maximum capital deployed: ₹60,000.<br>
-• A-quality filter can reject marginal breakouts.<br>
-• Profit targets use configurable risk:reward instead of a forced monthly target.</div></div>
-<div class="footer">No strategy can guarantee profit. Options can lose the entire premium rapidly. This dashboard remains simulation-only until a broker API is securely connected.</div>
+• Trade-quality filter remains active.<br>
+• Broker order execution is OFF.<br>
+• CONFIRM BUY is simulation/manual confirmation only.
+
 </div>
-<script>
-function money(n){return "₹"+Math.round(n).toLocaleString("en-IN")}
-function analyse(){
- const spot=+document.getElementById("spot").value, p=+document.getElementById("premium").value;
- const up=+document.getElementById("upper").value, low=+document.getElementById("lower").value;
- const slpct=+document.getElementById("slpct").value/100, lot=+document.getElementById("lot").value;
- const buffer=+document.getElementById("buffer").value, rr=+document.getElementById("rr").value;
- const dailypl=+document.getElementById("dailypl").value, trades=+document.getElementById("trades").value;
- const sig=document.getElementById("signal"), buy=document.getElementById("buy");
- if(!spot||!p||!lot){document.getElementById("status").innerText="Enter SENSEX spot, option premium and lot size.";return}
- if(dailypl<=-8000){sig.innerText="STOP";sig.className="signal red";buy.disabled=true;document.getElementById("status").innerText="DAILY LOSS LIMIT HIT — trading locked.";return}
- if(trades>=100){sig.innerText="STOP";sig.className="signal red";buy.disabled=true;document.getElementById("status").innerText="MAXIMUM 100 TRADES REACHED — trading locked for today.";return}
- const losses=+document.getElementById("losses").value;
- if(losses>=3){sig.innerText="COOLDOWN";sig.className="signal amber";buy.disabled=true;document.getElementById("status").innerText="3 CONSECUTIVE LOSSES — pause and reassess before another trade.";return}
- let side="WAIT";
- if(spot>up+buffer) side="CALL"; else if(spot<low-buffer) side="PUT";
- sig.innerText=side; sig.className="signal "+(side==="CALL"?"green":side==="PUT"?"red":"wait");
- const strike=Math.round(spot/100)*100;
- const sl=p*(1-slpct), target=p*(1+rr*slpct), riskPerLot=(p-sl)*lot;
- const maxLots=Math.max(0,Math.floor(Math.min(4000/riskPerLot,60000/(p*lot))));
- document.getElementById("strike").innerText=side==="WAIT"?"—":strike+" "+(side==="CALL"?"CE":"PE");
- document.getElementById("sl").innerText=side==="WAIT"?"—":money(sl);
- document.getElementById("target").innerText=side==="WAIT"?"—":money(target);
- document.getElementById("lots").innerText=side==="WAIT"?"—":maxLots;
- document.getElementById("used").innerText=side==="WAIT"?"—":money(maxLots*p*lot);
- document.getElementById("risk").innerText=side==="WAIT"?"—":money(maxLots*riskPerLot);
- document.getElementById("rrout").innerText=side==="WAIT"?"—":"1 : "+rr;
- const distance=side==="CALL"?(spot-up):(low-spot);
- const quality=side==="WAIT"?"NO TRADE":distance>=buffer*2?"A":"B";
- document.getElementById("quality").innerText=quality;
- const minq=document.getElementById("minquality").value;
- const qualityPass=(quality==="A")||(minq==="B"&&quality==="B");
- buy.disabled=side==="WAIT"||maxLots<1||!qualityPass;
- document.getElementById("status").innerText=side==="WAIT"?"No breakout/breakdown signal. Wait.":(!qualityPass?"Signal rejected by trade-quality filter.":"Qualified simulation prepared. Broker order execution is NOT connected.");
-}
-function confirmTrade(){document.getElementById("status").innerText="SIMULATION ONLY — no Paytm Money order was sent."}
-function exitTrade(){document.getElementById("signal").innerText="WAIT";document.getElementById("signal").className="signal wait";document.getElementById("buy").disabled=true;document.getElementById("status").innerText="Trade setup cancelled."}</script>
-<div id="backend-status" style="padding:10px;font-weight:bold">
-Connecting to Paytm live market data...
+
 </div>
+
+
+<div class="footer">
+Options involve substantial risk. Verify prices, contract details and order information with your broker before trading.
+</div>
+
+</div>
+
+
 <script>
-const BACKEND_URL = "https://say-organisations-hop-ordinance.trycloudflare.com";
+
+const BACKEND_URL =
+"https://say-organisations-hop-ordinance.trycloudflare.com";
 
 let LIVE_MARKET = null;
+let SERVER_CONNECTED = false;
 
-async function updateSensex() {
-    try {
-        const response = await fetch(BACKEND_URL + "/market");
-        const data = await response.json();
 
-        if (!response.ok || !data.success) {
-            throw new Error(data.error || "Backend error");
+function money(n){
+
+    if(
+        n === null ||
+        n === undefined ||
+        Number.isNaN(Number(n))
+    ){
+        return "—";
+    }
+
+    return "₹" +
+        Number(n).toLocaleString(
+            "en-IN",
+            {
+                maximumFractionDigits:2
+            }
+        );
+}
+
+
+async function updateMarket(){
+
+    const backendStatus =
+        document.getElementById(
+            "backend-status"
+        );
+
+    try{
+
+        const response =
+            await fetch(
+                BACKEND_URL +
+                "/market?ts=" +
+                Date.now(),
+                {
+                    cache:"no-store"
+                }
+            );
+
+        if(!response.ok){
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        if(!data.success){
+            throw new Error(
+                data.error ||
+                "Backend returned success=false"
+            );
         }
 
         LIVE_MARKET = data;
+        SERVER_CONNECTED = true;
 
-        // SENSEX
-        document.getElementById("spot").value = data.sensex.spot;
 
-        // LOT SIZE
-        document.getElementById("lot").value = data.lot_size;
+        document.getElementById("spot").value =
+            data.sensex.spot;
 
-        // Automatically choose correct option premium
-        const signal =
-            document.getElementById("signal").innerText.trim().toUpperCase();
+        document.getElementById("atm").value =
+            data.atm_strike;
 
-        if (signal === "CALL") {
-            document.getElementById("premium").value = data.ce.ltp;
+        document.getElementById("expiry").value =
+            data.expiry;
+
+        document.getElementById("lot").value =
+            data.lot_size;
+
+        document.getElementById("cepremium").value =
+            data.ce.ltp;
+
+        document.getElementById("pepremium").value =
+            data.pe.ltp;
+
+
+        backendStatus.className =
+            "livebar green";
+
+        backendStatus.innerText =
+            "● PAYTM LIVE" +
+            " | SENSEX " +
+            Number(
+                data.sensex.spot
+            ).toLocaleString("en-IN") +
+
+            " | ATM " +
+            data.atm_strike +
+
+            " | CE ₹" +
+            Number(
+                data.ce.ltp
+            ).toFixed(2) +
+
+            " | PE ₹" +
+            Number(
+                data.pe.ltp
+            ).toFixed(2) +
+
+            " | EXP " +
+            data.expiry;
+
+
+        const currentSignal =
+            document.getElementById(
+                "signal"
+            ).innerText.trim();
+
+
+        if(currentSignal === "CALL"){
+
+            document.getElementById(
+                "premium"
+            ).value = data.ce.ltp;
+
         }
-        else if (signal === "PUT") {
-            document.getElementById("premium").value = data.pe.ltp;
+
+        else if(currentSignal === "PUT"){
+
+            document.getElementById(
+                "premium"
+            ).value = data.pe.ltp;
+
         }
 
-        // LIVE STATUS
-        document.getElementById("backend-status").innerHTML =
-            "🟢 PAYTM LIVE" +
-            " | SENSEX: " +
-            Number(data.sensex.spot).toLocaleString("en-IN") +
-            " | ATM: " + data.atm_strike +
-            " | CE ₹" + Number(data.ce.ltp).toFixed(2) +
-            " | PE ₹" + Number(data.pe.ltp).toFixed(2) +
-            " | EXP: " + data.expiry;
-
-    } catch (error) {
-        console.error(error);
-
-        document.getElementById("backend-status").innerText =
-            "🔴 PAYTM LIVE DATA NOT CONNECTED";
     }
+
+    catch(error){
+
+        SERVER_CONNECTED = false;
+
+        console.error(
+            "Market connection error:",
+            error
+        );
+
+        backendStatus.className =
+            "livebar red";
+
+        backendStatus.innerText =
+            "SERVER NOT CONNECTED ❌";
+
+    }
+
 }
 
-updateSensex();
-setInterval(updateSensex, 5000);
+
+function analyse(){
+
+    if(
+        !SERVER_CONNECTED ||
+        !LIVE_MARKET
+    ){
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            "Live Paytm market data is not connected.";
+
+        return;
+    }
+
+
+    const spot =
+        Number(
+            LIVE_MARKET.sensex.spot
+        );
+
+    const up =
+        Number(
+            document.getElementById(
+                "upper"
+            ).value
+        );
+
+    const low =
+        Number(
+            document.getElementById(
+                "lower"
+            ).value
+        );
+
+    const slpct =
+        Number(
+            document.getElementById(
+                "slpct"
+            ).value
+        ) / 100;
+
+    const lot =
+        Number(
+            LIVE_MARKET.lot_size
+        );
+
+    const buffer =
+        Number(
+            document.getElementById(
+                "buffer"
+            ).value
+        );
+
+    const rr =
+        Number(
+            document.getElementById(
+                "rr"
+            ).value
+        );
+
+    const dailypl =
+        Number(
+            document.getElementById(
+                "dailypl"
+            ).value
+        );
+
+    const trades =
+        Number(
+            document.getElementById(
+                "trades"
+            ).value
+        );
+
+    const losses =
+        Number(
+            document.getElementById(
+                "losses"
+            ).value
+        );
+
+
+    const sig =
+        document.getElementById(
+            "signal"
+        );
+
+    const buy =
+        document.getElementById(
+            "buy"
+        );
+
+
+    if(dailypl <= -8000){
+
+        sig.innerText = "STOP";
+        sig.className = "signal red";
+
+        buy.disabled = true;
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            "DAILY LOSS LIMIT HIT — trading locked.";
+
+        return;
+    }
+
+
+    if(trades >= 100){
+
+        sig.innerText = "STOP";
+        sig.className = "signal red";
+
+        buy.disabled = true;
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            "MAXIMUM 100 TRADES REACHED.";
+
+        return;
+    }
+
+
+    if(losses >= 3){
+
+        sig.innerText =
+            "COOLDOWN";
+
+        sig.className =
+            "signal amber";
+
+        buy.disabled = true;
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            "3 CONSECUTIVE LOSSES — cooldown active.";
+
+        return;
+    }
+
+
+    let side = "WAIT";
+
+
+    if(spot > up + buffer){
+
+        side = "CALL";
+
+    }
+
+    else if(spot < low - buffer){
+
+        side = "PUT";
+
+    }
+
+
+    sig.innerText = side;
+
+    sig.className =
+        "signal " +
+        (
+            side === "CALL"
+            ? "green"
+            :
+            side === "PUT"
+            ? "red"
+            :
+            "wait"
+        );
+
+
+    if(side === "WAIT"){
+
+        document.getElementById(
+            "premium"
+        ).value = "";
+
+        clearTradeMetrics();
+
+        document.getElementById(
+            "quality"
+        ).innerText =
+            "NO TRADE";
+
+        buy.disabled = true;
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            "No confirmed breakout or breakdown. WAIT.";
+
+        return;
+    }
+
+
+    const option =
+        side === "CALL"
+        ? LIVE_MARKET.ce
+        : LIVE_MARKET.pe;
+
+
+    const p =
+        Number(
+            option.ltp
+        );
+
+
+    document.getElementById(
+        "premium"
+    ).value = p;
+
+
+    const sl =
+        p * (1 - slpct);
+
+
+    const target =
+        p * (1 + rr * slpct);
+
+
+    const riskPerLot =
+        (p - sl) * lot;
+
+
+    const capitalPerLot =
+        p * lot;
+
+
+    const riskLots =
+        riskPerLot > 0
+        ? Math.floor(
+            4000 / riskPerLot
+        )
+        : 0;
+
+
+    const capitalLots =
+        capitalPerLot > 0
+        ? Math.floor(
+            60000 / capitalPerLot
+        )
+        : 0;
+
+
+    const maxLots =
+        Math.max(
+            0,
+            Math.min(
+                riskLots,
+                capitalLots
+            )
+        );
+
+
+    document.getElementById(
+        "strike"
+    ).innerText =
+        LIVE_MARKET.atm_strike +
+        " " +
+        (
+            side === "CALL"
+            ? "CE"
+            : "PE"
+        );
+
+
+    document.getElementById(
+        "selectedpremium"
+    ).innerText =
+        money(p);
+
+
+    document.getElementById(
+        "sl"
+    ).innerText =
+        money(sl);
+
+
+    document.getElementById(
+        "target"
+    ).innerText =
+        money(target);
+
+
+    document.getElementById(
+        "lots"
+    ).innerText =
+        maxLots;
+
+
+    document.getElementById(
+        "used"
+    ).innerText =
+        money(
+            maxLots *
+            capitalPerLot
+        );
+
+
+    document.getElementById(
+        "risk"
+    ).innerText =
+        money(
+            maxLots *
+            riskPerLot
+        );
+
+
+    document.getElementById(
+        "rrout"
+    ).innerText =
+        "1 : " + rr;
+
+
+    const distance =
+        side === "CALL"
+        ? spot - up
+        : low - spot;
+
+
+    const quality =
+        distance >= buffer * 2
+        ? "A"
+        : "B";
+
+
+    document.getElementById(
+        "quality"
+    ).innerText =
+        quality;
+
+
+    const minQuality =
+        document.getElementById(
+            "minquality"
+        ).value;
+
+
+    const qualityPass =
+        quality === "A" ||
+        (
+            minQuality === "B" &&
+            quality === "B"
+        );
+
+
+    buy.disabled =
+        maxLots < 1 ||
+        !qualityPass;
+
+
+    if(!qualityPass){
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            "Signal rejected by trade-quality filter.";
+
+    }
+
+    else if(maxLots < 1){
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            "Trade rejected by risk/capital limits.";
+
+    }
+
+    else{
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            side +
+            " setup prepared using live " +
+            LIVE_MARKET.atm_strike +
+            " " +
+            (
+                side === "CALL"
+                ? "CE"
+                : "PE"
+            ) +
+            " premium. Order execution remains OFF.";
+
+    }
+
+}
+
+
+function clearTradeMetrics(){
+
+    document.getElementById(
+        "strike"
+    ).innerText = "—";
+
+    document.getElementById(
+        "selectedpremium"
+    ).innerText = "—";
+
+    document.getElementById(
+        "sl"
+    ).innerText = "—";
+
+    document.getElementById(
+        "target"
+    ).innerText = "—";
+
+    document.getElementById(
+        "lots"
+    ).innerText = "—";
+
+    document.getElementById(
+        "used"
+    ).innerText = "—";
+
+    document.getElementById(
+        "risk"
+    ).innerText = "—";
+
+    document.getElementById(
+        "rrout"
+    ).innerText = "—";
+
+}
+
+
+function confirmTrade(){
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "MANUAL CONFIRMATION ONLY — no Paytm Money order was sent.";
+
+}
+
+
+function exitTrade(){
+
+    document.getElementById(
+        "signal"
+    ).innerText =
+        "WAIT";
+
+    document.getElementById(
+        "signal"
+    ).className =
+        "signal wait";
+
+    document.getElementById(
+        "premium"
+    ).value = "";
+
+    document.getElementById(
+        "quality"
+    ).innerText =
+        "—";
+
+    document.getElementById(
+        "buy"
+    ).disabled =
+        true;
+
+    clearTradeMetrics();
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "Trade setup cancelled.";
+
+}
+
+
+// START LIVE DATA
+
+updateMarket();
+
+setInterval(
+    updateMarket,
+    5000
+);
+
 </script>
-</body></html>
+
+</body>
+</html>
