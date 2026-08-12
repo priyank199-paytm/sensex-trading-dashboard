@@ -109,37 +109,58 @@ function exitTrade(){document.getElementById("signal").innerText="WAIT";document
 <div id="backend-status" style="padding:10px;font-weight:bold">
 Connecting to Paytm live market data...
 </div>
-
 <script>
-const BACKEND_URL = "https://morgan-portsmouth-learn-started.trycloudflare.com";
+const BACKEND_URL = "https://say-organisations-hop-ordinance.trycloudflare.com";
+
+let LIVE_MARKET = null;
 
 async function updateSensex() {
     try {
-        const response = await fetch(BACKEND_URL + "/sensex");
+        const response = await fetch(BACKEND_URL + "/market");
         const data = await response.json();
 
         if (!response.ok || !data.success) {
-            throw new Error("Backend returned an error");
+            throw new Error(data.error || "Backend error");
         }
 
-        document.getElementById("spot").value = data.sensex;
+        LIVE_MARKET = data;
 
-        document.getElementById("backend-status").textContent =
-            "LIVE SENSEX: " +
-            Number(data.sensex).toLocaleString("en-IN") +
-            " | Change: " +
-            Number(data.change).toFixed(2) +
-            " (" +
-            Number(data.change_percent).toFixed(2) +
-            "%)";
+        // SENSEX
+        document.getElementById("spot").value = data.sensex.spot;
+
+        // LOT SIZE
+        document.getElementById("lot").value = data.lot_size;
+
+        // Automatically choose correct option premium
+        const signal =
+            document.getElementById("signal").innerText.trim().toUpperCase();
+
+        if (signal === "CALL") {
+            document.getElementById("premium").value = data.ce.ltp;
+        }
+        else if (signal === "PUT") {
+            document.getElementById("premium").value = data.pe.ltp;
+        }
+
+        // LIVE STATUS
+        document.getElementById("backend-status").innerHTML =
+            "🟢 PAYTM LIVE" +
+            " | SENSEX: " +
+            Number(data.sensex.spot).toLocaleString("en-IN") +
+            " | ATM: " + data.atm_strike +
+            " | CE ₹" + Number(data.ce.ltp).toFixed(2) +
+            " | PE ₹" + Number(data.pe.ltp).toFixed(2) +
+            " | EXP: " + data.expiry;
 
     } catch (error) {
-        document.getElementById("backend-status").textContent =
-            "Paytm live data: NOT CONNECTED";
+        console.error(error);
+
+        document.getElementById("backend-status").innerText =
+            "🔴 PAYTM LIVE DATA NOT CONNECTED";
     }
 }
 
 updateSensex();
-
 setInterval(updateSensex, 5000);
-</script></body></html>
+</script>
+</body></html>
